@@ -63,15 +63,39 @@ export default function ClassificationPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Classification failed');
+        // Check if response is JSON before trying to parse
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Classification failed');
+        } else {
+          // Server returned HTML error page (likely 500/502/504)
+          if (response.status >= 500) {
+            throw new Error('Model endpoint is starting up or unavailable');
+          } else if (response.status === 404) {
+            throw new Error('Classification endpoint not found');
+          } else {
+            throw new Error(`Server error (${response.status})`);
+          }
+        }
       }
 
       const data = await response.json();
       setResult(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      setError(`${errorMessage}. Please try again.`);
+      // Handle both API errors and JSON parsing errors
+      let errorMessage = 'An error occurred';
+
+      if (err instanceof Error) {
+        if (err.message.includes('JSON')) {
+          // JSON parsing error - likely HTML response from server
+          errorMessage = 'Model endpoint is starting up or experiencing issues';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+
+      setError(`${errorMessage}. Please wait a few minutes and try again.`);
     } finally {
       setIsClassifying(false);
     }

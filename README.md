@@ -21,6 +21,12 @@ This application provides a polished, professional interface for demonstrating t
 
 **Code:** [food101-conformal-classifier](https://github.com/jonathan-whiteley/food101-conformal-classifier)
 
+## 🎬 Demo
+
+![Food 101 App Demo](assets/Food101_app_demo.gif)
+
+*Quick demo showing image upload, classification, and adaptive prediction sets in action*
+
 ## ✨ Features
 
 - 🖼️ **Simple image upload** with drag-and-drop support
