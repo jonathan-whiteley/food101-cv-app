@@ -175,8 +175,8 @@ python -m pytest                 # Run tests (if available)
 
 ## 🐛 Troubleshooting
 
-### Slow Classification
-The model endpoint can take a few minutes to spin up on first use. The app displays a warning after 15 seconds to inform users.
+### Model Resources
+Currently, the model endpoint can take a few minutes to spin up on first use. 
 
 ### Connection Errors
 Verify your Databricks credentials in `.env.local`:
@@ -193,7 +193,9 @@ cd client && npm install
 
 ## 📝 License
 
-[Add your license here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2024 Jonathan Whiteley
 
 ## 🤝 Contributing
 
