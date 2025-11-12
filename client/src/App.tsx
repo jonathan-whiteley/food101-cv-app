@@ -1,11 +1,7 @@
-import { WelcomePage } from "./pages/WelcomePage";
+import ClassificationPage from "./pages/ClassificationPage";
 
 function App() {
-  return (
-    <div className="min-h-screen bg-background">
-      <WelcomePage />
-    </div>
-  );
+  return <ClassificationPage />;
 }
 
 export default App;
