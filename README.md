@@ -1,6 +1,6 @@
 # 🍕 Food 101 Conformal Classifier
 
-A modern web application for classifying food images using a ResNet50 model with conformal prediction for uncertainty quantification.
+A modern web application for classifying food images using a fine-tuned Vision Transformer (ViT) model with conformal prediction for uncertainty quantification.
 
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green)
@@ -45,7 +45,9 @@ This application provides a polished, professional interface for demonstrating t
 - **React Query** - Server state management
 
 ### ML Model
-- **ResNet50** architecture trained on Food 101 dataset
+- **Vision Transformer (ViT)** - Fine-tuned google/vit-base-patch16-224-in21k
+- **Dataset** - nateraw/food101 (101 food categories)
+- **Performance** - 84.53% accuracy on evaluation set
 - **Conformal Prediction** for uncertainty quantification
 - **Databricks Model Serving** for scalable inference
 - **90% coverage guarantee** across all predictions
@@ -163,10 +165,12 @@ python -m pytest                 # Run tests (if available)
 
 ## 📊 Model Details
 
-- **Dataset**: Food 101 (101 food categories)
-- **Base Model**: ResNet50 pre-trained on ImageNet
+- **Base Model**: google/vit-base-patch16-224-in21k (Vision Transformer)
+- **Fine-tuned on**: nateraw/food101 dataset (101 food categories)
+- **Evaluation Loss**: 0.6771
+- **Evaluation Accuracy**: 84.53%
 - **Calibration**: Conformal prediction with 90% coverage guarantee
-- **Input Size**: 224x224 pixels
+- **Input Size**: 224x224 pixels (16x16 patch size)
 - **Preprocessing**: Standard ImageNet normalization
 
 ## 🐛 Troubleshooting
