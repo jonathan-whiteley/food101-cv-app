@@ -28,10 +28,18 @@ export function ClassificationResults({
     return 'text-orange-600';
   };
 
+  // Sort predictions by score (highest to lowest)
+  const sortedPredictions = predictionSet
+    .map((label, idx) => ({
+      label,
+      score: predictionScores[idx]
+    }))
+    .sort((a, b) => b.score - a.score);
+
   return (
     <div className="space-y-6">
       {/* Top Prediction */}
-      <Card className="border-2 border-primary">
+      <Card className="border-blue-200 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:border-blue-800 dark:from-blue-950/30 dark:to-purple-950/30">
         <CardHeader>
           <CardTitle className="text-sm text-muted-foreground">Top Prediction</CardTitle>
         </CardHeader>
@@ -46,30 +54,29 @@ export function ClassificationResults({
       </Card>
 
       {/* Prediction Set */}
-      <Card>
+      <Card className="border-blue-200 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:border-blue-800 dark:from-blue-950/30 dark:to-purple-950/30">
         <CardHeader>
           <CardTitle className="text-sm text-muted-foreground">
-            Prediction Set ({predictionSet.length} possibilities)
+            Prediction Set ({predictionSet.length} {predictionSet.length === 1 ? 'possibility' : 'possibilities'})
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {predictionSet.map((label, idx) => {
-              const score = predictionScores[idx];
-              const percentage = (score * 100).toFixed(1);
+            {sortedPredictions.map((prediction, idx) => {
+              const percentage = (prediction.score * 100).toFixed(1);
 
               return (
                 <div key={idx} className="space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span className="font-medium capitalize">{label}</span>
-                    <span className={`font-semibold ${getConfidenceTextColor(score)}`}>
+                    <span className="font-medium capitalize">{prediction.label}</span>
+                    <span className={`font-semibold ${getConfidenceTextColor(prediction.score)}`}>
                       {percentage}%
                     </span>
                   </div>
                   <Progress
-                    value={score * 100}
+                    value={prediction.score * 100}
                     className="h-2"
-                    indicatorClassName={getConfidenceColor(score)}
+                    indicatorClassName={getConfidenceColor(prediction.score)}
                   />
                 </div>
               );
