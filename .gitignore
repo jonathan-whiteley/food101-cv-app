@@ -295,3 +295,7 @@ mlartifacts/
 
 # Generated client
 client/src/client/
+
+# Development tools and template files
+tools/
+docs/development/
