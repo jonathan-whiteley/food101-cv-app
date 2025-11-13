@@ -300,8 +300,9 @@ client/src/client/
 tools/
 docs/development/
 
-# Build artifacts (except client/build needed for Databricks deployment)
+# Build artifacts
 build/
+!client/build/
 __pycache__/
 
 # Generated requirements file (can be regenerated from pyproject.toml)

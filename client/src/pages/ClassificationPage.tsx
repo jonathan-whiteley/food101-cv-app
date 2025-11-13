@@ -62,34 +62,55 @@ export default function ClassificationPage() {
         body: formData
       });
 
+      // Always check content type first before any parsing
+      const contentType = response.headers.get('content-type');
+      const isJson = contentType && contentType.includes('application/json');
+
       if (!response.ok) {
-        // Check if response is JSON before trying to parse
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || 'Classification failed');
-        } else {
-          // Server returned HTML error page (likely 500/502/504)
+        // Non-JSON error response (HTML error page from proxy/nginx)
+        if (!isJson) {
           if (response.status >= 500) {
             throw new Error('Model endpoint is starting up or unavailable');
+          } else if (response.status === 502 || response.status === 504) {
+            throw new Error('Model endpoint is not ready');
           } else if (response.status === 404) {
             throw new Error('Classification endpoint not found');
           } else {
-            throw new Error(`Server error (${response.status})`);
+            throw new Error('Service temporarily unavailable');
           }
+        }
+
+        // JSON error response
+        try {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Classification failed');
+        } catch (parseErr) {
+          throw new Error('Model endpoint is experiencing issues');
         }
       }
 
-      const data = await response.json();
-      setResult(data);
+      // Success response - parse JSON
+      if (!isJson) {
+        throw new Error('Unexpected response format from server');
+      }
+
+      try {
+        const data = await response.json();
+        setResult(data);
+      } catch (parseErr) {
+        throw new Error('Failed to parse classification results');
+      }
+
     } catch (err) {
-      // Handle both API errors and JSON parsing errors
+      // Handle all errors with user-friendly messages
       let errorMessage = 'An error occurred';
 
       if (err instanceof Error) {
-        if (err.message.includes('JSON')) {
-          // JSON parsing error - likely HTML response from server
-          errorMessage = 'Model endpoint is starting up or experiencing issues';
+        // Check for common JSON parsing error patterns
+        if (err.message.includes('JSON') ||
+            err.message.includes('Unexpected token') ||
+            err.message.includes('upstream')) {
+          errorMessage = 'Model endpoint is starting up';
         } else {
           errorMessage = err.message;
         }
