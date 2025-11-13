@@ -306,3 +306,6 @@ __pycache__/
 
 # Generated requirements file (can be regenerated from pyproject.toml)
 requirements.txt
+
+.claude/
+.vscode/
