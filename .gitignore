@@ -299,3 +299,10 @@ client/src/client/
 # Development tools and template files
 tools/
 docs/development/
+
+# Build artifacts (except client/build needed for Databricks deployment)
+build/
+__pycache__/
+
+# Generated requirements file (can be regenerated from pyproject.toml)
+requirements.txt
